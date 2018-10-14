@@ -49,7 +49,7 @@ public class CallbackMethodClientMain {
         ApplicationConfig applicationConfig = new ApplicationConfig().setAppName("future-server");
 
         MethodConfig methodConfig = new MethodConfig();
-        methodConfig.setName("sayHello")
+        methodConfig.setName("jdkTest8")
             .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK)
             .setOnReturn(new SofaResponseCallback() {
                 @Override

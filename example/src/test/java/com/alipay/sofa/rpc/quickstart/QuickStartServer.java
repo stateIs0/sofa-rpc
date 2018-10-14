@@ -36,5 +36,26 @@ public class QuickStartServer {
             .setServer(serverConfig); // 指定服务端
 
         providerConfig.export(); // 发布服务
+
+
+
+    }
+}
+
+class Server2{
+
+    public static void main(String[] args) {
+        ServerConfig serverConfig = new ServerConfig()
+            .setProtocol("bolt") // 设置一个协议，默认bolt
+            .setPort(9697) // 设置一个端口，默认12200
+            .setDaemon(false); // 非守护线程
+
+        ProviderConfig<HelloService2> providerConfig = new ProviderConfig<HelloService2>()
+            .setInterfaceId(HelloService2.class.getName()) // 指定接口
+            .setRef(new HelloServiceImpl2()) // 指定实现
+            .setServer(serverConfig); // 指定服务端
+
+        providerConfig.export(); // 发布服务
+
     }
 }

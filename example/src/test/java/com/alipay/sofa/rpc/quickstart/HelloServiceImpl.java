@@ -21,8 +21,15 @@ package com.alipay.sofa.rpc.quickstart;
  */
 public class HelloServiceImpl implements HelloService {
     @Override
-    public String sayHello(String string) {
-        System.out.println("Server receive: " + string);
+    public String jdkTest99(String string) {
+        return "hello " + string + " ！";
+    }
+
+}
+
+class HelloServiceImpl2 implements HelloService2 {
+    @Override
+    public String javassist(String string) {
         return "hello " + string + " ！";
     }
 }

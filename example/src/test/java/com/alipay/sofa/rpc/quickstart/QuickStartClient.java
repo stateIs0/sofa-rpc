@@ -33,7 +33,7 @@ public class QuickStartClient {
         HelloService helloService = consumerConfig.refer();
 
         while (true) {
-            System.out.println(helloService.sayHello("world"));
+            System.out.println(helloService.jdkTest99("world"));
             try {
                 Thread.sleep(2000);
             } catch (Exception e) {

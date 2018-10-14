@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.filter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import com.alibaba.dubbo.common.bytecode.Wrapper;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
@@ -24,9 +28,6 @@ import com.alipay.sofa.rpc.core.exception.RpcErrorType;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * 服务端调用业务实现类
@@ -50,6 +51,8 @@ public class ProviderInvoker<T> extends FilterInvoker {
         this.providerConfig = providerConfig;
     }
 
+    Class<?>[] types = null;
+    Wrapper wrapper = null;
     @Override
     public SofaResponse invoke(SofaRequest request) throws SofaRpcException {
 
@@ -71,10 +74,27 @@ public class ProviderInvoker<T> extends FilterInvoker {
         try {
             // 反射 真正调用业务代码
             Method method = request.getMethod();
+            T target = providerConfig.getRef();
+            String methodName = method.getName();
+            Object[] arguments = request.getMethodArgs();
+
             if (method == null) {
                 throw new SofaRpcException(RpcErrorType.SERVER_FILTER, "Need decode method first!");
             }
-            Object result = method.invoke(providerConfig.getRef(), request.getMethodArgs());
+            Object result = null;
+            // just for test
+            if (!"javassist".equals(methodName)) {
+                result = method.invoke(target, arguments);
+            } else {
+                if (types == null) {
+                    types = method.getParameterTypes();
+                }
+                if (wrapper == null) {
+                    wrapper = Wrapper
+                        .getWrapper(target.getClass());
+                }
+                result = wrapper.invokeMethod(target, methodName, types, arguments);
+            }
 
             sofaResponse.setAppResponse(result);
         } catch (IllegalArgumentException e) { // 非法参数，可能是实现类和接口类不对应) 

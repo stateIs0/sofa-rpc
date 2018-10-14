@@ -20,5 +20,11 @@ package com.alipay.sofa.rpc.quickstart;
  * Quick Start demo interface
  */
 public interface HelloService {
-    String sayHello(String string);
+
+    /** 为了保持方法名长度相同 */
+    String jdkTest99(String string);
+}
+interface HelloService2 {
+
+    String javassist(String string);
 }
